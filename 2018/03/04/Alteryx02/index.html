@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Alteryx," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="该部分融合了《Data Blending for Dummies》以及《Learning Alteryx》的第三章。 1. 什么是数据融合 做分析前，需要接入各类数据，清洗和准备，这项工作又称为数据融合。数据融合是一个过程而非一次性事件，根据需要我们可以不断增加、删除或更新数据。数据融合与数据集成的区别如下：  数据集成是IT术语，通常指整合多种来源的数据，经过清洗，在数据库、数据仓库或数">
+<meta name="keywords" content="Alteryx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alteryx系列之二：数据融合（Data Blending）">
+<meta property="og:url" content="http://yoursite.com/2018/03/04/Alteryx02/index.html">
+<meta property="og:site_name" content="Chris&#39;s home">
+<meta property="og:description" content="该部分融合了《Data Blending for Dummies》以及《Learning Alteryx》的第三章。 1. 什么是数据融合 做分析前，需要接入各类数据，清洗和准备，这项工作又称为数据融合。数据融合是一个过程而非一次性事件，根据需要我们可以不断增加、删除或更新数据。数据融合与数据集成的区别如下：  数据集成是IT术语，通常指整合多种来源的数据，经过清洗，在数据库、数据仓库或数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-04T05:31:13.242Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Alteryx系列之二：数据融合（Data Blending）">
+<meta name="twitter:description" content="该部分融合了《Data Blending for Dummies》以及《Learning Alteryx》的第三章。 1. 什么是数据融合 做分析前，需要接入各类数据，清洗和准备，这项工作又称为数据融合。数据融合是一个过程而非一次性事件，根据需要我们可以不断增加、删除或更新数据。数据融合与数据集成的区别如下：  数据集成是IT术语，通常指整合多种来源的数据，经过清洗，在数据库、数据仓库或数">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/04/Alteryx02/"/>
+
+
+
+
+
+  <title>Alteryx系列之二：数据融合（Data Blending） | Chris's home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chris's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/04/Alteryx02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris mu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Alteryx系列之二：数据融合（Data Blending）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-04T07:29:55+08:00">
+                2018-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>该部分融合了<a href="https://www.alteryx.com/resources/data-blending-for-dummies" target="_blank" rel="noopener">《Data Blending for Dummies》</a>以及《Learning Alteryx》的第三章。</p>
+<h1 id="什么是数据融合">1. 什么是数据融合</h1>
+<p>做分析前，需要接入各类数据，清洗和准备，这项工作又称为数据融合。数据融合是一个过程而非一次性事件，根据需要我们可以不断增加、删除或更新数据。数据融合与数据集成的区别如下：</p>
+<ul>
+<li>数据集成是IT术语，通常指整合多种来源的数据，经过清洗，在数据库、数据仓库或数据集市中建立统一的数据实体。DBA或BI专家负责接入数据，这些数据成为其他系统或工作流的数据源。</li>
+<li>数据融合由商业分析员或数据分析师操作，他们构建一个数据集为了解决具体的业务问题。</li>
+</ul>
+<h1 id="如何做数据融合">2. 如何做数据融合</h1>
+<p>数据融合包括以下内容：</p>
+<ul>
+<li>接入数据：选数据和拿数据</li>
+<li>清洗数据：重整格式，去伪存真</li>
+<li>连接数据：合并数据，以备后用</li>
+</ul>
+<p>在此基础上，数据分析师还会做两件事情：</p>
+<ul>
+<li>高级分析：例如预测分析和空间分析</li>
+<li>输出结果：形象地表达观点，或为其他处理过程提供数据</li>
+</ul>
+<h2 id="数据准备">2.1. 数据准备</h2>
+<p>数据清洗和准备阶段往往占据60%-80%的时间。数据分析师从广泛的数据来源中筛选哪些需要哪些不需要，并检查数据的质量和完整性，在此基础之上，数据分析师往往会对数据进行转换和重整。其中的关键环节如下：</p>
+<ul>
+<li>重构、重排、修复数据</li>
+<li>找到缺失和错误数据并更正</li>
+<li>剔除大量的无关数据</li>
+<li>明确数据集的规模，全量或部分</li>
+</ul>
+<h2 id="数据连接">2.2. 数据连接</h2>
+<p>当获得远离错误，格式可用，主题相关的数据后，分析师需要把这些分散的数据连接在一起并创建数据集以备后用。Alteryx在数据连接方面可以提供以下功能：</p>
+<ul>
+<li>连接任意数据类型</li>
+<li>实施行级连接</li>
+<li>多字段连接</li>
+<li>模糊逻辑匹配(Fuzzy logic matching)</li>
+<li>放到地理空间中考虑问题</li>
+</ul>
+<p>逻辑模糊匹配，例如从销售信息和地址信息中创建客户档案，这些信息中的名字可能不完全一致，存在各种缩写。逻辑模糊匹配将一个地址上的John, Jon, Jonny, Johnathan看成是一个人。</p>
+<h2 id="自动化和再现性">2.3. 自动化和再现性</h2>
+<p>现实中经常需要定期重跑分析流程，Alteryx依靠其工作流处理过程来支持该自动化需求，具体如下：</p>
+<ul>
+<li>创建宏，以备复用</li>
+<li>支持定制分析过程</li>
+<li>新数据自动触发运行已有处理过程</li>
+<li>处理过程保存为应用apps</li>
+</ul>
+<h1 id="用alteryx做数据融合">3. 用Alteryx做数据融合</h1>
+<p>用好Alteryx，可以最大化数据融合的价值，具体有以下措施：</p>
+<ul>
+<li>用好预测分析，好的数据融合有利于生成更精确的预测模型</li>
+<li>利用APIs和SDK编程</li>
+<li>用好空间分析</li>
+<li>利用分析应用Apps，在Alteryx Analytics Gallery上找到有用的Apps，下载运行</li>
+<li>与数据可视化相结合（市面的可视化软件大多不擅长高级数据融合，并缺乏预测分析和空间分析的能力）</li>
+</ul>
+<h2 id="数据准备-1">3.1 数据准备</h2>
+<ul>
+<li>Auto Field：自动调整元数据，将每个字符串字段都自动更新为最小的字段类型和大小</li>
+<li>Unique：唯一值和重复值筛选</li>
+<li>Imputation：插值</li>
+<li>Multi-Field Binning：数据桶，等记录或等距</li>
+</ul>
+<h2 id="数据清洗">3.2 数据清洗</h2>
+<ul>
+<li>去掉首尾空白</li>
+<li>Tabs, Line Breaks, and Duplicate Whitespace</li>
+<li>Punctuation removes the following characters:! &quot; # $ % &amp; ’ ( ) * + ,  - . / : ; &lt; = &gt; ? @ [ / ] ^ _ ` { | } ~</li>
+</ul>
+<h2 id="数据过滤">3.3 数据过滤</h2>
+<ul>
+<li>Select：选择或取消选择字段，重命名字段，更改数据类型和大小，为字段添加说明</li>
+<li>自定义过滤器： 添加表达式</li>
+</ul>
+<h2 id="join-and-union">3.4 Join and union</h2>
+<ul>
+<li>Join</li>
+<li>Join multiple：此外，可以用自定义过滤器按照组合规则筛选</li>
+<li>Union：此外，可以将几个工具组合成工具容器，并禁用该容器</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Alteryx/" rel="tag"># Alteryx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/04/Alteryx01/" rel="next" title="Alteryx系列之一：初来乍到">
+                <i class="fa fa-chevron-left"></i> Alteryx系列之一：初来乍到
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/04/Alteryx03/" rel="prev" title="Alteryx系列之三：基本功能——公式计算、转换数据、数据解析">
+                Alteryx系列之三：基本功能——公式计算、转换数据、数据解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chris mu</p>
+              <p class="site-description motion-element" itemprop="description">Present is a present.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是数据融合"><span class="nav-number">1.</span> <span class="nav-text">1. 什么是数据融合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何做数据融合"><span class="nav-number">2.</span> <span class="nav-text">2. 如何做数据融合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据连接"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 数据连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动化和再现性"><span class="nav-number">2.3.</span> <span class="nav-text">2.3. 自动化和再现性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用alteryx做数据融合"><span class="nav-number">3.</span> <span class="nav-text">3. 用Alteryx做数据融合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备-1"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据清洗"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 数据清洗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据过滤"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 数据过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#join-and-union"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 Join and union</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chris mu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
